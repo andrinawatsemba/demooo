@@ -1,0 +1,22 @@
+[theme]
+base = "light"
+primaryColor = "#0090F0"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F2F7FC"
+textColor = "#1A1A1A"
+font = "sans-serif"
+
+# Bumped up from the 16px default - this is what actually reaches
+# table/dataframe text, which page-level CSS cannot touch since
+# st.dataframe renders on a canvas, not as real HTML.
+baseFontSize = 18
+
+# Larger, bolder KPI numbers now that there are fewer of them on
+# screen at once (dropped Unique Advertisers and Airtime in minutes).
+metricValueFontSize = "2.6rem"
+
+# Light, clearly-readable header row on every table - this is what
+# fixes the muted/hard-to-read column headers you saw in Data Table
+# and Not Aired Log.
+dataframeHeaderBackgroundColor = "#D6F0FC"
+dataframeBorderColor = "#B8DDEE"
