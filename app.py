@@ -29,7 +29,7 @@ if "pulled_from_github" not in st.session_state:
     st.session_state.pulled_from_github = True
 
 # ── PAGE CONFIG ──────────────────────────────────────────────────
-st.set_page_config(page_title="NBS Ad Tracker", page_icon="📺",
+st.set_page_config(page_title="Ad Tracker Demo", page_icon="📺",
                     layout="wide", initial_sidebar_state="expanded")
 
 T = config.THEME

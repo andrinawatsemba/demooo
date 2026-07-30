@@ -125,7 +125,7 @@ def write_clean_data(ws, df):
 def write_weekly_summary(ws, df, week_label):
     ws.merge_cells("A1:H1")
     title = ws["A1"]
-    title.value = "NBS AD TRACKING - WEEKLY SUMMARY"
+    title.value = "demo AD TRACKING - WEEKLY SUMMARY"
     title.font = Font(bold=True, size=14, color=DARK_BLUE)
     title.alignment = Alignment(horizontal="left", vertical="center")
     ws.row_dimensions[1].height = 30
@@ -390,7 +390,7 @@ if __name__ == "__main__":
     df, week_label, corrections, flags, dropped_rows, day_detection = result
 
     safe_week = week_label.replace(" ", "_").replace(".", "-")
-    output_file = OUTPUT_FOLDER / f"NBS_AdReport_{safe_week}.xlsx"
+    output_file = OUTPUT_FOLDER / f"demo_AdReport_{safe_week}.xlsx"
 
     from openpyxl import Workbook
     wb = Workbook()

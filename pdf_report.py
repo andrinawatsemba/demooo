@@ -19,19 +19,19 @@ import utils
 BASE           = Path(__file__).resolve().parent
 WAREHOUSE_PATH = BASE / "warehouse" / "warehouse.xlsx"
 OUTPUT_FOLDER  = BASE / "output"
-LOGO_PATH      = BASE / "nbs_logo.png"
+LOGO_PATH      = BASE / "demo_logo.png"
 OUTPUT_FOLDER.mkdir(exist_ok=True)
 
 # ── COLORS ───────────────────────────────────────────────────────
 # Page chrome (headers, borders, KPI text): blue/white theme.
-# The ONLY red pixels anywhere in this PDF live inside nbs_logo.png -
+# The ONLY red pixels anywhere in this PDF live inside demo_logo.png -
 # nothing here draws red directly.
 THEME_BLUE     = colors.HexColor(config.THEME["PRIMARY_BLUE"])
 THEME_ACCENT   = colors.HexColor(config.THEME["ACCENT_BLUE"])
-NBS_WHITE      = colors.white
-NBS_DARK_GREY  = colors.HexColor(config.THEME["DARK_GREY"])
-NBS_LIGHT_GREY = colors.HexColor(config.THEME["LIGHT_GREY"])
-NBS_MID_GREY   = colors.HexColor("#BFBFBF")
+demo_WHITE      = colors.white
+demo_DARK_GREY  = colors.HexColor(config.THEME["DARK_GREY"])
+demo_LIGHT_GREY = colors.HexColor(config.THEME["LIGHT_GREY"])
+demo_MID_GREY   = colors.HexColor("#BFBFBF")
 
 # Category colors - looked up BY NAME, not position. This is the fix
 # for the old ordering landmine where a positional color list could
@@ -49,17 +49,17 @@ for _h in range(24):
 # ── STYLES ───────────────────────────────────────────────────────
 def build_styles():
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="NBSTitle", fontSize=20, textColor=THEME_BLUE,
+    styles.add(ParagraphStyle(name="demoTitle", fontSize=20, textColor=THEME_BLUE,
                                fontName="Helvetica-Bold", alignment=TA_LEFT, spaceAfter=14))
-    styles.add(ParagraphStyle(name="NBSSubtitle", fontSize=10, textColor=NBS_DARK_GREY,
+    styles.add(ParagraphStyle(name="demoSubtitle", fontSize=10, textColor=demo_DARK_GREY,
                                fontName="Helvetica", alignment=TA_LEFT, spaceAfter=2))
-    styles.add(ParagraphStyle(name="NBSSectionHeader", fontSize=11, textColor=NBS_WHITE,
+    styles.add(ParagraphStyle(name="demoSectionHeader", fontSize=11, textColor=demo_WHITE,
                                fontName="Helvetica-Bold", alignment=TA_LEFT, spaceAfter=4, spaceBefore=8))
-    styles.add(ParagraphStyle(name="NBSBodyText", fontSize=8, textColor=NBS_DARK_GREY,
+    styles.add(ParagraphStyle(name="demoBodyText", fontSize=8, textColor=demo_DARK_GREY,
                                fontName="Helvetica", alignment=TA_LEFT, spaceAfter=4))
     styles.add(ParagraphStyle(name="KPIValue", fontSize=16, textColor=THEME_BLUE,
                                fontName="Helvetica-Bold", alignment=TA_CENTER))
-    styles.add(ParagraphStyle(name="KPILabel", fontSize=7, textColor=NBS_DARK_GREY,
+    styles.add(ParagraphStyle(name="KPILabel", fontSize=7, textColor=demo_DARK_GREY,
                                fontName="Helvetica", alignment=TA_CENTER))
     return styles
 
@@ -102,9 +102,9 @@ def build_kpi_table(df, styles):
     ]]
     t = Table(data, colWidths=[4.5*cm] * 3)
     t.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), NBS_LIGHT_GREY),
-        ("BOX", (0, 0), (-1, -1), 0.5, NBS_MID_GREY),
-        ("LINEAFTER", (0, 0), (-2, -1), 0.5, NBS_MID_GREY),
+        ("BACKGROUND", (0, 0), (-1, -1), demo_LIGHT_GREY),
+        ("BOX", (0, 0), (-1, -1), 0.5, demo_MID_GREY),
+        ("LINEAFTER", (0, 0), (-2, -1), 0.5, demo_MID_GREY),
         ("TOPPADDING", (0, 0), (-1, -1), 10),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
@@ -132,7 +132,7 @@ def build_pie_chart(df, ad_sq_filter=None):
 
     for i, colour in enumerate(slice_colors):
         pie.slices[i].fillColor = colour
-        pie.slices[i].strokeColor = NBS_WHITE
+        pie.slices[i].strokeColor = demo_WHITE
         pie.slices[i].strokeWidth = 1.5
 
     if sum(values) > 0:
@@ -145,9 +145,9 @@ def build_pie_chart(df, ad_sq_filter=None):
     for i, (cat, val, pct) in enumerate(zip(config.STANDARD_CATEGORIES, values, pcts)):
         y = legend_y - (i * 30)
         drawing.add(Rect(legend_x, y, 16, 16, fillColor=slice_colors[i],
-                          strokeColor=NBS_WHITE, strokeWidth=0.5))
+                          strokeColor=demo_WHITE, strokeWidth=0.5))
         drawing.add(String(legend_x + 24, y + 4, cat, fontSize=10,
-                            fillColor=NBS_DARK_GREY, fontName="Helvetica-Bold"))
+                            fillColor=demo_DARK_GREY, fontName="Helvetica-Bold"))
         drawing.add(String(legend_x + 150, y + 4, f"{pct}%", fontSize=10,
                             fillColor=THEME_BLUE, fontName="Helvetica-Bold"))
         drawing.add(String(legend_x + 190, y + 4, f"({int(val):,} secs)", fontSize=9,
@@ -170,15 +170,15 @@ def build_time_block_chart(df):
         x = chart_x + i * gap + (gap - bar_w) / 2
         h = (val / max_val) * chart_h if max_val else 0
         drawing.add(Rect(x, chart_y, bar_w, h, fillColor=THEME_BLUE,
-                          strokeColor=NBS_WHITE, strokeWidth=0.5))
+                          strokeColor=demo_WHITE, strokeWidth=0.5))
         drawing.add(String(x + bar_w / 2, chart_y - 12, block, fontSize=6,
-                            fillColor=NBS_DARK_GREY, fontName="Helvetica", textAnchor="middle"))
+                            fillColor=demo_DARK_GREY, fontName="Helvetica", textAnchor="middle"))
 
     for step in range(5):
         val = int(max_val * step / 4)
         y = chart_y + (step / 4) * chart_h
         drawing.add(String(chart_x - 5, y - 3, f"{val:,}", fontSize=7,
-                            fillColor=NBS_DARK_GREY, fontName="Helvetica", textAnchor="end"))
+                            fillColor=demo_DARK_GREY, fontName="Helvetica", textAnchor="end"))
     return drawing
 
 # ── CATEGORY TABLE (used for AD-only / SQ-only / Combined) ─────
@@ -210,8 +210,8 @@ def build_category_table(df, title, ad_sq_filter=None, colwidths=None):
         # header row below it so the two are visually distinct, not
         # something you have to guess by reading column contents.
         ("SPAN", (0, 0), (-1, 0)),
-        ("BACKGROUND", (0, 0), (-1, 0), NBS_DARK_GREY),
-        ("TEXTCOLOR", (0, 0), (-1, 0), NBS_WHITE),
+        ("BACKGROUND", (0, 0), (-1, 0), demo_DARK_GREY),
+        ("TEXTCOLOR", (0, 0), (-1, 0), demo_WHITE),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("FONTSIZE", (0, 0), (-1, 0), 10.5),
         ("ALIGN", (0, 0), (-1, 0), "CENTER"),
@@ -219,17 +219,17 @@ def build_category_table(df, title, ad_sq_filter=None, colwidths=None):
         ("BOTTOMPADDING", (0, 0), (-1, 0), 7),
 
         ("BACKGROUND", (0, 1), (-1, 1), THEME_BLUE),
-        ("TEXTCOLOR", (0, 1), (-1, 1), NBS_WHITE),
+        ("TEXTCOLOR", (0, 1), (-1, 1), demo_WHITE),
         ("FONTNAME", (0, 1), (-1, 1), "Helvetica-Bold"),
         ("FONTSIZE", (0, 1), (-1, -1), 9.5),
         ("ALIGN", (0, 1), (-1, -1), "CENTER"),
         ("ALIGN", (0, 2), (0, -1), "LEFT"),
         ("FONTNAME", (0, 2), (0, -1), "Helvetica-Bold"),
-        ("ROWBACKGROUNDS", (0, 2), (-1, -2), [NBS_WHITE, NBS_LIGHT_GREY]),
-        ("BACKGROUND", (0, -1), (-1, -1), NBS_DARK_GREY),
-        ("TEXTCOLOR", (0, -1), (-1, -1), NBS_WHITE),
+        ("ROWBACKGROUNDS", (0, 2), (-1, -2), [demo_WHITE, demo_LIGHT_GREY]),
+        ("BACKGROUND", (0, -1), (-1, -1), demo_DARK_GREY),
+        ("TEXTCOLOR", (0, -1), (-1, -1), demo_WHITE),
         ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
-        ("GRID", (0, 1), (-1, -1), 0.5, NBS_MID_GREY),
+        ("GRID", (0, 1), (-1, -1), 0.5, demo_MID_GREY),
         ("TOPPADDING", (0, 1), (-1, -1), 6),
         ("BOTTOMPADDING", (0, 1), (-1, -1), 6),
     ]))
@@ -254,17 +254,17 @@ def build_summary_table(df):
     t = Table(rows, colWidths=[3.8*cm, 3*cm, 3*cm, 3.4*cm, 3.8*cm])
     t.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), THEME_BLUE),
-        ("TEXTCOLOR", (0, 0), (-1, 0), NBS_WHITE),
+        ("TEXTCOLOR", (0, 0), (-1, 0), demo_WHITE),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("FONTSIZE", (0, 0), (-1, -1), 9.5),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
         ("ALIGN", (0, 1), (0, -1), "LEFT"),
         ("FONTNAME", (0, 1), (0, -1), "Helvetica-Bold"),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -2), [NBS_WHITE, NBS_LIGHT_GREY]),
-        ("BACKGROUND", (0, -1), (-1, -1), NBS_DARK_GREY),
-        ("TEXTCOLOR", (0, -1), (-1, -1), NBS_WHITE),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -2), [demo_WHITE, demo_LIGHT_GREY]),
+        ("BACKGROUND", (0, -1), (-1, -1), demo_DARK_GREY),
+        ("TEXTCOLOR", (0, -1), (-1, -1), demo_WHITE),
         ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
-        ("GRID", (0, 0), (-1, -1), 0.5, NBS_MID_GREY),
+        ("GRID", (0, 0), (-1, -1), 0.5, demo_MID_GREY),
         ("TOPPADDING", (0, 0), (-1, -1), 5),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
@@ -276,17 +276,17 @@ def on_page(canvas, doc):
     w, h = A4
     canvas.setFillColor(THEME_BLUE)
     canvas.rect(0, h - 1*cm, w, 1*cm, fill=True, stroke=False)
-    canvas.setFillColor(NBS_MID_GREY)
+    canvas.setFillColor(demo_MID_GREY)
     canvas.setFont("Helvetica", 7)
     canvas.drawCentredString(w / 2, 0.5*cm,
-        f"NBS Ad Tracker  |  Internal Use Only  |  Next Media Services  |  Page {doc.page}")
+        f"demo Ad Tracker  |  Internal Use Only  |  demo Media Services  |  Page {doc.page}")
     canvas.setStrokeColor(THEME_BLUE)
     canvas.setLineWidth(0.5)
     canvas.line(1.5*cm, 1.1*cm, w - 1.5*cm, 1.1*cm)
     canvas.restoreState()
 
 def section_header(title, styles):
-    data = [[Paragraph(title, styles["NBSSectionHeader"])]]
+    data = [[Paragraph(title, styles["demoSectionHeader"])]]
     t = Table(data, colWidths=[17*cm])
     t.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), THEME_BLUE),
@@ -300,7 +300,7 @@ def section_header(title, styles):
 def build_pdf(df, week_label, corrections, flags, dropped_rows):
     styles = build_styles()
     safe_week = week_label.replace(" ", "_").replace(".", "-")
-    output = OUTPUT_FOLDER / f"NBS_AdReport_{safe_week}.pdf"
+    output = OUTPUT_FOLDER / f"demo_AdReport_{safe_week}.pdf"
 
     doc = SimpleDocTemplate(str(output), pagesize=A4, rightMargin=1.5*cm,
                              leftMargin=1.5*cm, topMargin=2.5*cm, bottomMargin=2*cm)
@@ -313,13 +313,13 @@ def build_pdf(df, week_label, corrections, flags, dropped_rows):
         story.append(Spacer(1, 0.2*cm))
 
     story.append(HRFlowable(width="100%", thickness=2, color=THEME_BLUE, spaceAfter=0.3*cm))
-    story.append(Paragraph("NBS AD TRACKING REPORT", styles["NBSTitle"]))
-    story.append(Paragraph(f"Week: {week_label}", styles["NBSSubtitle"]))
+    story.append(Paragraph("demo AD TRACKING REPORT", styles["demoTitle"]))
+    story.append(Paragraph(f"Week: {week_label}", styles["demoSubtitle"]))
     story.append(Spacer(1, 0.1*cm))
     story.append(Paragraph(
-        f"Generated: {datetime.now().strftime('%d %B %Y, %H:%M')}  |  Next Media Services  |  Internal Use Only",
-        styles["NBSSubtitle"]))
-    story.append(HRFlowable(width="100%", thickness=1, color=NBS_MID_GREY, spaceAfter=0.4*cm))
+        f"Generated: {datetime.now().strftime('%d %B %Y, %H:%M')}  |  demo Media Services  |  Internal Use Only",
+        styles["demoSubtitle"]))
+    story.append(HRFlowable(width="100%", thickness=1, color=demo_MID_GREY, spaceAfter=0.4*cm))
 
     story.append(section_header("EXECUTIVE SUMMARY", styles))
     story.append(Spacer(1, 0.3*cm))
