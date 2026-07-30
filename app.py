@@ -96,7 +96,7 @@ st.markdown(f"""
 
 st.markdown(f"""
 <div class="main-header">
-    <h1>NBS Ad Tracker</h1>
+    <h1>DEMO</h1>
     <p>Next Media Services — Internal Use Only</p>
 </div>
 """, unsafe_allow_html=True)
@@ -181,7 +181,7 @@ else:
     st.sidebar.markdown("No warehouse found yet.")
 
 st.sidebar.markdown("---")
-st.sidebar.caption("NBS Ad Tracker v2.0")
+st.sidebar.caption("DEMO v2.0")
 
 # ── SESSION STATE ────────────────────────────────────────────────
 for key, default in {"df_processed": None, "week_label": None, "pipeline_run": False}.items():
