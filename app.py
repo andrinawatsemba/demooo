@@ -97,7 +97,7 @@ st.markdown(f"""
 st.markdown(f"""
 <div class="main-header">
     <h1>DEMO</h1>
-    <p>Next Media Services — Internal Use Only</p>
+    <p>DEMO Media Services — Internal Use Only</p>
 </div>
 """, unsafe_allow_html=True)
 
